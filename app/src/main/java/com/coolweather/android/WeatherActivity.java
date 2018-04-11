@@ -101,7 +101,7 @@ public class WeatherActivity extends AppCompatActivity{
 
         SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString=preferences.getString("weather",null);
-        if(weatherString!=null){
+        if(weatherString !=null){
             Weather weather= Utility.handleWeatherResponse(weatherString);
             weatherId=weather.basic.weatherId;
             showWeatherInfo(weather);
@@ -137,18 +137,19 @@ public class WeatherActivity extends AppCompatActivity{
                     @Override
                     public void run() {
                         Toast.makeText(WeatherActivity.this,"获取天气失败",Toast.LENGTH_SHORT).show();
+                        swipeRefresh.setRefreshing(false);
                     }
                 });
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                 final  String responseText=response.body().string();
+                final  String responseText=response.body().string();
                 final  Weather weather=Utility.handleWeatherResponse(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(weather!=null&&"ok".equals(weather.status)){
+                        if(weather != null&&"ok".equals(weather.status)){
                             SharedPreferences.Editor editor=PreferenceManager
                                     .getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather",responseText);
